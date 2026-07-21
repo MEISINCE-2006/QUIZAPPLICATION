@@ -1,195 +1,336 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Role-Play Application</title>
+    <title>Full Stack Developer Quiz Platform</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Role Selection Screen -->
-    <div id="roleSelection" class="screen active">
-        <div class="container">
-            <h1 class="title fade-in">Quiz Application</h1>
-            <p class="subtitle fade-in">Choose your role to get started</p>
-            <div class="role-buttons">
-                <button class="role-btn admin-btn" onclick="selectRole('admin')">
-                    <div class="role-icon">👨‍💼</div>
-                    <h3>Admin</h3>
-                    <p>Create and manage quiz questions</p>
-                </button>
-                <button class="role-btn user-btn" onclick="selectRole('user')">
-                    <div class="role-icon">👤</div>
-                    <h3>User</h3>
-                    <p>Take quizzes and test your knowledge</p>
-                </button>
+    <!-- Canvas for Victory Confetti -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- Top Quick Control Bar -->
+    <div class="top-controls">
+        <button class="control-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Theme">🌙</button>
+        <button class="control-btn" id="soundToggleBtn" onclick="toggleSound()" title="Toggle Sound Effects">🔊</button>
+    </div>
+
+    <!-- Admin PIN Passcode Verification Modal -->
+    <div id="pinModal" class="modal-overlay">
+        <div class="modal-card" id="modalCard">
+            <div class="lock-icon">🔒</div>
+            <h2>Admin Authentication</h2>
+            <p style="color: var(--text-secondary); margin-top: 6px; font-size: 0.9rem;">
+                Enter the 4-digit Security PIN to access the Admin Panel.
+            </p>
+            
+            <div class="pin-inputs">
+                <input type="password" maxlength="1" class="pin-digit" data-index="0" autofocus autocomplete="off">
+                <input type="password" maxlength="1" class="pin-digit" data-index="1" autocomplete="off">
+                <input type="password" maxlength="1" class="pin-digit" data-index="2" autocomplete="off">
+                <input type="password" maxlength="1" class="pin-digit" data-index="3" autocomplete="off">
+            </div>
+            
+            <div id="pinErrorMsg" class="pin-error-msg"></div>
+
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button class="btn-primary" onclick="submitAdminPin()">Unlock Panel</button>
+                <button class="btn-secondary" onclick="closePinModal()">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- Admin Dashboard -->
+    <!-- Role Selection Screen -->
+    <div id="roleSelection" class="screen active">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <span class="badge-pill tech">⚡ Full Stack Engineering</span>
+            </div>
+            <h1 class="title">Developer Quiz Studio</h1>
+            <p class="subtitle">Master Frontend, Backend, Databases & Cloud Architecture</p>
+            
+            <div class="role-buttons">
+                <div class="role-card" onclick="openAdminAccess()">
+                    <div class="role-icon-container">👨‍💻</div>
+                    <h3>Admin Portal</h3>
+                    <p>Create questions, attach code snippets, manage question bank & export datasets.</p>
+                </div>
+                
+                <div class="role-card" onclick="selectRole('user')">
+                    <div class="role-icon-container">🚀</div>
+                    <h3>Developer Arena</h3>
+                    <p>Test your Full Stack skills across Frontend, Node.js, SQL/NoSQL & System Design.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Screen -->
     <div id="adminDashboard" class="screen">
         <div class="container">
-            <div class="header">
-                <h1>Admin Dashboard</h1>
-                <button class="back-btn" onclick="goBack()">← Back to Role Selection</button>
+            <div class="header-bar">
+                <h1>⚙️ Admin Command Center</h1>
+                <button class="btn-secondary" onclick="goBack()">← Back to Roles</button>
             </div>
             
             <div class="admin-actions">
-                <button class="action-btn" onclick="showCreateQuestion()">
-                    ➕ Create New Question
-                </button>
-                <button class="action-btn" onclick="showQuestions()">
-                    📝 View All Questions
-                </button>
-                <button class="action-btn" onclick="exportQuestions()">
-                    💾 Export Questions
-                </button>
-                <input type="file" id="fileInput" accept=".txt" onchange="importQuestions(event)" style="display: none;">
-                <button class="action-btn" onclick="document.getElementById('fileInput').click()">
-                    📁 Import Questions
-                </button>
+                <div class="admin-action-card" onclick="showCreateQuestion()">
+                    <div class="action-icon">➕</div>
+                    <div class="action-info">
+                        <h4>Create Question</h4>
+                        <p>Add new tech problem</p>
+                    </div>
+                </div>
+                
+                <div class="admin-action-card" onclick="showQuestions()">
+                    <div class="action-icon">📋</div>
+                    <div class="action-info">
+                        <h4>Manage Questions</h4>
+                        <p>View, edit & filter bank</p>
+                    </div>
+                </div>
+                
+                <div class="admin-action-card" onclick="exportQuestions()">
+                    <div class="action-icon">💾</div>
+                    <div class="action-info">
+                        <h4>Export Dataset</h4>
+                        <p>Save questions as JSON</p>
+                    </div>
+                </div>
+
+                <div class="admin-action-card" onclick="document.getElementById('fileInput').click()">
+                    <div class="action-icon">📁</div>
+                    <div class="action-info">
+                        <h4>Import Dataset</h4>
+                        <p>Upload JSON question file</p>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" accept=".json,.txt" onchange="importQuestions(event)" style="display: none;">
             </div>
 
-            <!-- Create Question Form -->
-            <div id="createQuestionForm" class="form-container hidden">
-                <h2>Create New Question</h2>
+            <!-- Create / Edit Question Form -->
+            <div id="createQuestionForm" class="form-card hidden">
+                <h2 id="formTitle" style="margin-bottom: 25px; color: var(--text-primary);">Add New Developer Question</h2>
                 <form id="questionForm">
-                    <div class="form-group">
-                        <label for="difficulty">Difficulty Level:</label>
-                        <select id="difficulty" required>
-                            <option value="">Select Difficulty</option>
-                            <option value="easy">Easy</option>
-                            <option value="medium">Medium</option>
-                            <option value="hard">Hard</option>
-                        </select>
+                    <input type="hidden" id="editQuestionIndex" value="-1">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="difficulty">Difficulty Level:</label>
+                            <select id="difficulty" required>
+                                <option value="">Select Difficulty</option>
+                                <option value="easy">Easy (Fundamentals)</option>
+                                <option value="medium">Medium (Intermediate)</option>
+                                <option value="hard">Hard (Advanced / Architect)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="category">Category / Domain:</label>
+                            <select id="category" required>
+                                <option value="Frontend">Frontend (HTML, CSS, JS, React)</option>
+                                <option value="Backend">Backend (Node.js, APIs, Express)</option>
+                                <option value="Database">Database (SQL, MongoDB, Redis)</option>
+                                <option value="DevOps & Git">DevOps & Git (Docker, CI/CD, Linux)</option>
+                                <option value="Security">Security & Web Standards (OWASP, JWT)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="question">Question Text:</label>
+                            <textarea id="question" placeholder="e.g. What is the output of the following JavaScript code snippet?" required></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="codeSnippet">Code Snippet (Optional):</label>
+                            <textarea id="codeSnippet" class="code-input" placeholder="// Paste code snippet here (e.g. const data = await fetch(...);)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="option1">Option A:</label>
+                            <input type="text" id="option1" placeholder="Enter option A" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="option2">Option B:</label>
+                            <input type="text" id="option2" placeholder="Enter option B" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="option3">Option C:</label>
+                            <input type="text" id="option3" placeholder="Enter option C" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="option4">Option D:</label>
+                            <input type="text" id="option4" placeholder="Enter option D" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="correctAnswer">Correct Option:</label>
+                            <select id="correctAnswer" required>
+                                <option value="">Select Correct Option</option>
+                                <option value="A">Option A</option>
+                                <option value="B">Option B</option>
+                                <option value="C">Option C</option>
+                                <option value="D">Option D</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="explanation">Explanation Note (Optional):</label>
+                            <input type="text" id="explanation" placeholder="Brief explanation shown after quiz answer">
+                        </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="question">Question:</label>
-                        <textarea id="question" placeholder="Enter your question here..." required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="option1">Option A:</label>
-                        <input type="text" id="option1" placeholder="Enter option A" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="option2">Option B:</label>
-                        <input type="text" id="option2" placeholder="Enter option B" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="option3">Option C:</label>
-                        <input type="text" id="option3" placeholder="Enter option C" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="option4">Option D:</label>
-                        <input type="text" id="option4" placeholder="Enter option D" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="correctAnswer">Correct Answer:</label>
-                        <select id="correctAnswer" required>
-                            <option value="">Select Correct Answer</option>
-                            <option value="A">Option A</option>
-                            <option value="B">Option B</option>
-                            <option value="C">Option C</option>
-                            <option value="D">Option D</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-buttons">
-                        <button type="submit">Add Question</button>
-                        <button type="button" onclick="hideCreateQuestion()">Cancel</button>
+
+                    <div style="display: flex; gap: 14px; margin-top: 25px; justify-content: flex-end;">
+                        <button type="button" class="btn-secondary" onclick="hideCreateQuestion()">Cancel</button>
+                        <button type="submit" class="btn-primary" id="saveQuestionBtn">Save Question</button>
                     </div>
                 </form>
             </div>
 
-            <!-- Questions List -->
-            <div id="questionsList" class="questions-container hidden">
-                <h2>All Questions</h2>
+            <!-- Questions List View -->
+            <div id="questionsList" class="form-card hidden">
+                <div class="questions-header">
+                    <h2>Question Inventory (<span id="totalQuestionCount">0</span>)</h2>
+                    <div class="filter-bar">
+                        <input type="text" id="searchKeyword" placeholder="🔍 Search keyword..." oninput="filterQuestions()">
+                        <select id="filterDifficulty" onchange="filterQuestions()">
+                            <option value="all">All Difficulties</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                        <select id="filterCategory" onchange="filterQuestions()">
+                            <option value="all">All Categories</option>
+                            <option value="Frontend">Frontend</option>
+                            <option value="Backend">Backend</option>
+                            <option value="Database">Database</option>
+                            <option value="DevOps & Git">DevOps & Git</option>
+                            <option value="Security">Security</option>
+                        </select>
+                    </div>
+                </div>
                 <div id="questionsContent"></div>
             </div>
         </div>
     </div>
 
-    <!-- User Dashboard -->
+    <!-- User Dashboard Screen -->
     <div id="userDashboard" class="screen">
         <div class="container">
-            <div class="header">
-                <h1>User Dashboard</h1>
-                <button class="back-btn" onclick="goBack()">← Back to Role Selection</button>
+            <div class="header-bar">
+                <h1>🎯 Select Quiz Challenge</h1>
+                <button class="btn-secondary" onclick="goBack()">← Back to Roles</button>
             </div>
             
-            <div class="difficulty-selection">
-                <h2>Select Quiz Difficulty</h2>
-                <div class="difficulty-buttons">
-                    <button class="difficulty-btn easy" onclick="startQuiz('easy')">
-                        <div class="difficulty-icon">🟢</div>
-                        <h3>Easy</h3>
-                        <p>Perfect for beginners</p>
-                    </button>
-                    <button class="difficulty-btn medium" onclick="startQuiz('medium')">
-                        <div class="difficulty-icon">🟡</div>
-                        <h3>Medium</h3>
-                        <p>Moderate challenge</p>
-                    </button>
-                    <button class="difficulty-btn hard" onclick="startQuiz('hard')">
-                        <div class="difficulty-icon">🔴</div>
-                        <h3>Hard</h3>
-                        <p>Expert level</p>
-                    </button>
+            <div style="margin-bottom: 25px;">
+                <label style="font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; display: block;">Choose Domain Filter (Optional):</label>
+                <div class="filter-bar" style="justify-content: flex-start;">
+                    <button class="btn-secondary category-chip active" onclick="selectQuizCategory('all', this)">All Categories</button>
+                    <button class="btn-secondary category-chip" onclick="selectQuizCategory('Frontend', this)">Frontend</button>
+                    <button class="btn-secondary category-chip" onclick="selectQuizCategory('Backend', this)">Backend</button>
+                    <button class="btn-secondary category-chip" onclick="selectQuizCategory('Database', this)">Database</button>
+                    <button class="btn-secondary category-chip" onclick="selectQuizCategory('DevOps & Git', this)">DevOps</button>
+                </div>
+            </div>
+
+            <div class="quiz-options-grid">
+                <div class="difficulty-card easy" onclick="startQuiz('easy')">
+                    <div class="difficulty-icon-box">🌱</div>
+                    <h3>Junior / Easy</h3>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Core syntax, fundamental APIs, basic HTML/CSS/JS & SQL basics.</p>
+                </div>
+
+                <div class="difficulty-card medium" onclick="startQuiz('medium')">
+                    <div class="difficulty-icon-box">⚡</div>
+                    <h3>Mid-Level / Medium</h3>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Async logic, Express middleware, React state, REST APIs & indexing.</p>
+                </div>
+
+                <div class="difficulty-card hard" onclick="startQuiz('hard')">
+                    <div class="difficulty-icon-box">🔥</div>
+                    <h3>Senior / Hard</h3>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">System architecture, closures, event loop, security vulnerabilities & Docker.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Quiz Screen -->
+    <!-- Active Quiz Screen -->
     <div id="quizScreen" class="screen">
         <div class="container">
             <div class="quiz-header">
-                <div class="quiz-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-container">
+                    <div class="quiz-meta-info">
+                        <span id="questionCounter">Question 1 of 10</span>
+                        <span id="categoryBadge" class="badge category">Frontend</span>
                     </div>
-                    <span id="questionCounter">Question 1 of 10</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressFill"></div>
+                    </div>
                 </div>
-                <button class="back-btn" onclick="endQuiz()">← End Quiz</button>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <div class="timer-box" id="timerBox">
+                        ⏱️ <span id="timerCount">30</span>s
+                    </div>
+                    <button class="btn-secondary" onclick="endQuiz()">Exit Quiz</button>
+                </div>
             </div>
             
-            <div class="quiz-content">
-                <div class="question-card">
-                    <h2 id="currentQuestion">Question will appear here</h2>
-                    <div class="options" id="optionsContainer">
-                        <!-- Options will be dynamically added -->
-                    </div>
-                    <button id="nextBtn" class="next-btn hidden" onclick="nextQuestion()">Next Question</button>
+            <div class="quiz-card">
+                <h2 id="currentQuestion" class="question-title">Loading Question...</h2>
+                <div id="codeSnippetBox" class="code-block hidden"></div>
+                
+                <div class="options-grid" id="optionsContainer">
+                    <!-- Options injected dynamically -->
+                </div>
+
+                <div id="explanationBox" class="explanation-box hidden"></div>
+                
+                <div style="margin-top: 25px; text-align: right;">
+                    <button id="nextBtn" class="btn-primary hidden" onclick="nextQuestion()">Next Question →</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Results Screen -->
+    <!-- Quiz Results Screen -->
     <div id="resultsScreen" class="screen">
         <div class="container">
-            <div class="results-content">
-                <div class="results-card">
-                    <div class="results-icon" id="resultsIcon">🎉</div>
-                    <h1 id="resultsTitle">Quiz Complete!</h1>
-                    <div class="score-display">
-                        <div class="score-circle">
-                            <span id="scoreText">0/0</span>
-                        </div>
+            <div class="results-card">
+                <div style="font-size: 3.5rem; margin-bottom: 10px;" id="resultsIcon">🏆</div>
+                <h1 id="resultsTitle" style="font-size: 2.2rem; color: var(--text-primary);">Quiz Complete!</h1>
+                <p id="resultsMessage" style="color: var(--text-secondary); margin-top: 8px;">Great effort on testing your Full Stack skills!</p>
+
+                <div class="score-circle-container">
+                    <svg class="score-circle-svg" viewBox="0 0 160 160">
+                        <defs>
+                            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6366f1" />
+                                <stop offset="100%" stop-color="#d946ef" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="score-circle-bg" cx="80" cy="80" r="70"></circle>
+                        <circle class="score-circle-fill" id="scoreCircleFill" cx="80" cy="80" r="70"></circle>
+                    </svg>
+                    <div class="score-center-text">
+                        <span id="scoreText">0/0</span>
+                        <span class="score-percentage" id="scorePercent">0%</span>
                     </div>
-                    <p id="resultsMessage">Great job!</p>
-                    <div class="results-buttons">
-                        <button class="action-btn" onclick="goToUserDashboard()">Take Another Quiz</button>
-                        <button class="action-btn secondary" onclick="goBack()">Back to Role Selection</button>
-                    </div>
+                </div>
+
+                <div style="display: flex; gap: 14px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                    <button class="btn-primary" onclick="goToUserDashboard()">Take Another Quiz</button>
+                    <button class="btn-secondary" onclick="toggleAnswerReview()">Review Answers 📖</button>
+                    <button class="btn-secondary" onclick="goBack()">Role Selection</button>
+                </div>
+
+                <!-- Detailed Answer Review Panel -->
+                <div id="answerReviewPanel" class="answer-review-section hidden">
+                    <h3 style="margin-bottom: 20px; color: var(--text-primary);">Detailed Answer Review</h3>
+                    <div id="reviewListContent"></div>
                 </div>
             </div>
         </div>
