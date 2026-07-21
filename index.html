@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,15 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
+
 <body>
     <!-- Canvas for Victory Confetti -->
     <canvas id="confettiCanvas"></canvas>
 
     <!-- Top Quick Control Bar -->
     <div class="top-controls">
-        <button class="control-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Theme">🌙</button>
+        <button class="control-btn" id="themeToggleBtn" onclick="toggleTheme()"
+            title="Toggle Dark/Light Theme">🌙</button>
         <button class="control-btn" id="soundToggleBtn" onclick="toggleSound()" title="Toggle Sound Effects">🔊</button>
     </div>
 
@@ -25,14 +28,14 @@
             <p style="color: var(--text-secondary); margin-top: 6px; font-size: 0.9rem;">
                 Enter the 4-digit Security PIN to access the Admin Panel.
             </p>
-            
+
             <div class="pin-inputs">
                 <input type="password" maxlength="1" class="pin-digit" data-index="0" autofocus autocomplete="off">
                 <input type="password" maxlength="1" class="pin-digit" data-index="1" autocomplete="off">
                 <input type="password" maxlength="1" class="pin-digit" data-index="2" autocomplete="off">
                 <input type="password" maxlength="1" class="pin-digit" data-index="3" autocomplete="off">
             </div>
-            
+
             <div id="pinErrorMsg" class="pin-error-msg"></div>
 
             <div style="display: flex; gap: 12px; justify-content: center;">
@@ -45,7 +48,8 @@
     <!-- Exit Quiz Confirmation Modal -->
     <div id="exitModal" class="modal-overlay">
         <div class="modal-card">
-            <div class="lock-icon" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: var(--error-text); margin: 0 auto 15px auto;">
+            <div class="lock-icon"
+                style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: var(--error-text); margin: 0 auto 15px auto;">
                 🚪
             </div>
             <h2 style="color: var(--text-primary);">Exit Quiz?</h2>
@@ -54,7 +58,9 @@
             </p>
 
             <div style="display: flex; gap: 14px; justify-content: center; margin-top: 25px;">
-                <button class="btn-primary" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; color: white;" onclick="confirmExitQuiz()">
+                <button class="btn-primary"
+                    style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; color: white;"
+                    onclick="confirmExitQuiz()">
                     Yes, Exit Quiz
                 </button>
                 <button class="btn-secondary" onclick="closeExitModal()">
@@ -68,13 +74,15 @@
     <div id="registrationModal" class="modal-overlay">
         <div class="modal-card" style="max-width: 480px; text-align: left;">
             <div style="text-align: center; margin-bottom: 20px;">
-                <div class="lock-icon" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(99, 102, 241, 0.2)); border-color: rgba(6, 182, 212, 0.4); margin: 0 auto 15px auto;">🚀</div>
+                <div class="lock-icon"
+                    style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(99, 102, 241, 0.2)); border-color: rgba(6, 182, 212, 0.4); margin: 0 auto 15px auto;">
+                    🚀</div>
                 <h2>Developer Arena Entry</h2>
                 <p style="color: var(--text-secondary); margin-top: 6px; font-size: 0.9rem;">
                     Please provide your basic details to access the challenge arena.
                 </p>
             </div>
-            
+
             <form id="registrationForm" onsubmit="submitRegistration(event)">
                 <div class="form-group">
                     <label for="regName">Name *</label>
@@ -82,7 +90,8 @@
                 </div>
                 <div class="form-group">
                     <label for="regEmail">Email *</label>
-                    <input type="email" id="regEmail" placeholder="e.g. jane.doe@example.com" required autocomplete="email">
+                    <input type="email" id="regEmail" placeholder="e.g. jane.doe@example.com" required
+                        autocomplete="email">
                 </div>
                 <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
                     <div class="form-group" style="margin-bottom: 0;">
@@ -105,7 +114,7 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 25px;">
                     <button type="button" class="btn-secondary" onclick="closeRegistrationModal()">Cancel</button>
                     <button type="submit" class="btn-primary">Enter Arena ⚡</button>
@@ -122,14 +131,14 @@
             </div>
             <h1 class="title">Developer Quiz Studio</h1>
             <p class="subtitle">Master Frontend, Backend, Databases & Cloud Architecture</p>
-            
+
             <div class="role-buttons">
                 <div class="role-card" onclick="openAdminAccess()">
                     <div class="role-icon-container">👨‍💻</div>
                     <h3>Admin Portal</h3>
                     <p>Create questions, attach code snippets, manage question bank & export datasets.</p>
                 </div>
-                
+
                 <div class="role-card" onclick="selectRole('user')">
                     <div class="role-icon-container">🚀</div>
                     <h3>Developer Arena</h3>
@@ -146,7 +155,7 @@
                 <h1>⚙️ Admin Command Center</h1>
                 <button class="btn-secondary" onclick="goBack()">← Back to Roles</button>
             </div>
-            
+
             <div class="admin-actions">
                 <div class="admin-action-card" onclick="showCreateQuestion()">
                     <div class="action-icon">➕</div>
@@ -155,7 +164,7 @@
                         <p>Add new tech problem</p>
                     </div>
                 </div>
-                
+
                 <div class="admin-action-card" onclick="showQuestions()">
                     <div class="action-icon">📋</div>
                     <div class="action-info">
@@ -163,7 +172,7 @@
                         <p>View, edit & filter bank</p>
                     </div>
                 </div>
-                
+
                 <div class="admin-action-card" onclick="exportQuestions()">
                     <div class="action-icon">💾</div>
                     <div class="action-info">
@@ -179,12 +188,14 @@
                         <p>Upload JSON question file</p>
                     </div>
                 </div>
-                <input type="file" id="fileInput" accept=".json,.txt" onchange="importQuestions(event)" style="display: none;">
+                <input type="file" id="fileInput" accept=".json,.txt" onchange="importQuestions(event)"
+                    style="display: none;">
             </div>
 
             <!-- Create / Edit Question Form -->
             <div id="createQuestionForm" class="form-card hidden">
-                <h2 id="formTitle" style="margin-bottom: 25px; color: var(--text-primary);">Add New Developer Question</h2>
+                <h2 id="formTitle" style="margin-bottom: 25px; color: var(--text-primary);">Add New Developer Question
+                </h2>
                 <form id="questionForm">
                     <input type="hidden" id="editQuestionIndex" value="-1">
                     <div class="form-grid">
@@ -197,7 +208,7 @@
                                 <option value="hard">Hard (Advanced / Architect)</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="category">Category / Domain:</label>
                             <select id="category" required>
@@ -211,29 +222,32 @@
 
                         <div class="form-group full-width">
                             <label for="question">Question Text:</label>
-                            <textarea id="question" placeholder="e.g. What is the output of the following JavaScript code snippet?" required></textarea>
+                            <textarea id="question"
+                                placeholder="e.g. What is the output of the following JavaScript code snippet?"
+                                required></textarea>
                         </div>
 
                         <div class="form-group full-width">
                             <label for="codeSnippet">Code Snippet (Optional):</label>
-                            <textarea id="codeSnippet" class="code-input" placeholder="// Paste code snippet here (e.g. const data = await fetch(...);)"></textarea>
+                            <textarea id="codeSnippet" class="code-input"
+                                placeholder="// Paste code snippet here (e.g. const data = await fetch(...);)"></textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="option1">Option A:</label>
                             <input type="text" id="option1" placeholder="Enter option A" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="option2">Option B:</label>
                             <input type="text" id="option2" placeholder="Enter option B" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="option3">Option C:</label>
                             <input type="text" id="option3" placeholder="Enter option C" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="option4">Option D:</label>
                             <input type="text" id="option4" placeholder="Enter option D" required>
@@ -268,7 +282,8 @@
                 <div class="questions-header">
                     <h2>Question Inventory (<span id="totalQuestionCount">0</span>)</h2>
                     <div class="filter-bar">
-                        <input type="text" id="searchKeyword" placeholder="🔍 Search keyword..." oninput="filterQuestions()">
+                        <input type="text" id="searchKeyword" placeholder="🔍 Search keyword..."
+                            oninput="filterQuestions()">
                         <select id="filterDifficulty" onchange="filterQuestions()">
                             <option value="all">All Difficulties</option>
                             <option value="easy">Easy</option>
@@ -297,27 +312,42 @@
                 <h1>🎯 Select Quiz Challenge</h1>
                 <button class="btn-secondary" onclick="goBack()">← Back to Roles</button>
             </div>
-            
+
             <!-- Developer Welcome Card -->
-            <div id="developerWelcomeCard" class="form-card" style="margin-bottom: 25px; padding: 20px; display: flex; align-items: center; gap: 15px; justify-content: space-between; flex-wrap: wrap;">
+            <div id="developerWelcomeCard" class="form-card"
+                style="margin-bottom: 25px; padding: 20px; display: flex; align-items: center; gap: 15px; justify-content: space-between; flex-wrap: wrap;">
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <div class="role-icon-container" style="width: 50px; height: 50px; border-radius: 12px; margin: 0; font-size: 1.6rem; background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.3);">💻</div>
+                    <div class="role-icon-container"
+                        style="width: 50px; height: 50px; border-radius: 12px; margin: 0; font-size: 1.6rem; background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.3);">
+                        💻</div>
                     <div>
-                        <h3 id="welcomeDevName" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Developer</h3>
-                        <p id="welcomeDevDetails" style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Experience Level | Email Address</p>
+                        <h3 id="welcomeDevName"
+                            style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Developer</h3>
+                        <p id="welcomeDevDetails"
+                            style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Experience Level
+                            | Email Address</p>
                     </div>
                 </div>
-                <button class="btn-secondary" onclick="editDeveloperDetails()" style="padding: 8px 14px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">✏️ Edit Details</button>
+                <button class="btn-secondary" onclick="editDeveloperDetails()"
+                    style="padding: 8px 14px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">✏️
+                    Edit Details</button>
             </div>
-            
+
             <div style="margin-bottom: 25px;">
-                <label style="font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; display: block;">Choose Domain Filter (Optional):</label>
+                <label
+                    style="font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; display: block;">Choose
+                    Domain Filter (Optional):</label>
                 <div class="filter-bar" style="justify-content: flex-start;">
-                    <button class="btn-secondary category-chip active" onclick="selectQuizCategory('all', this)">All Categories</button>
-                    <button class="btn-secondary category-chip" onclick="selectQuizCategory('Frontend', this)">Frontend</button>
-                    <button class="btn-secondary category-chip" onclick="selectQuizCategory('Backend', this)">Backend</button>
-                    <button class="btn-secondary category-chip" onclick="selectQuizCategory('Database', this)">Database</button>
-                    <button class="btn-secondary category-chip" onclick="selectQuizCategory('DevOps & Git', this)">DevOps</button>
+                    <button class="btn-secondary category-chip active" onclick="selectQuizCategory('all', this)">All
+                        Categories</button>
+                    <button class="btn-secondary category-chip"
+                        onclick="selectQuizCategory('Frontend', this)">Frontend</button>
+                    <button class="btn-secondary category-chip"
+                        onclick="selectQuizCategory('Backend', this)">Backend</button>
+                    <button class="btn-secondary category-chip"
+                        onclick="selectQuizCategory('Database', this)">Database</button>
+                    <button class="btn-secondary category-chip"
+                        onclick="selectQuizCategory('DevOps & Git', this)">DevOps</button>
                 </div>
             </div>
 
@@ -325,19 +355,22 @@
                 <div class="difficulty-card easy" onclick="startQuiz('easy')">
                     <div class="difficulty-icon-box">🌱</div>
                     <h3>Junior / Easy</h3>
-                    <p style="color: var(--text-secondary); margin-top: 8px;">Core syntax, fundamental APIs, basic HTML/CSS/JS & SQL basics.</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Core syntax, fundamental APIs, basic
+                        HTML/CSS/JS & SQL basics.</p>
                 </div>
 
                 <div class="difficulty-card medium" onclick="startQuiz('medium')">
                     <div class="difficulty-icon-box">⚡</div>
                     <h3>Mid-Level / Medium</h3>
-                    <p style="color: var(--text-secondary); margin-top: 8px;">Async logic, Express middleware, React state, REST APIs & indexing.</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Async logic, Express middleware, React
+                        state, REST APIs & indexing.</p>
                 </div>
 
                 <div class="difficulty-card hard" onclick="startQuiz('hard')">
                     <div class="difficulty-icon-box">🔥</div>
                     <h3>Senior / Hard</h3>
-                    <p style="color: var(--text-secondary); margin-top: 8px;">System architecture, closures, event loop, security vulnerabilities & Docker.</p>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">System architecture, closures, event loop,
+                        security vulnerabilities & Docker.</p>
                 </div>
             </div>
         </div>
@@ -349,7 +382,9 @@
             <div class="quiz-header">
                 <div class="progress-container">
                     <div class="quiz-meta-info" style="margin-bottom: 8px;">
-                        <span id="questionCounter" style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">Question 1 of 10</span>
+                        <span id="questionCounter"
+                            style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">Question 1 of
+                            10</span>
                         <span id="categoryBadge" class="badge category">Frontend</span>
                     </div>
                     <div class="progress-bar-bg">
@@ -361,21 +396,22 @@
                     <div class="timer-box" id="timerBox">
                         ⏱️ <span id="timerCount">30</span>s
                     </div>
-                    <button class="btn-secondary" onclick="openExitModal()" style="display: flex; align-items: center; gap: 6px;">
+                    <button class="btn-secondary" onclick="openExitModal()"
+                        style="display: flex; align-items: center; gap: 6px;">
                         🚪 Exit Quiz
                     </button>
                 </div>
             </div>
-            
+
             <div class="quiz-card">
                 <h2 id="currentQuestion" class="question-title">Loading Question...</h2>
                 <div id="codeSnippetBox" class="code-block hidden"></div>
-                
+
                 <div class="options-grid" id="optionsContainer">
                 </div>
 
                 <div id="explanationBox" class="explanation-box hidden"></div>
-                
+
                 <div style="margin-top: 25px; text-align: right;">
                     <button id="nextBtn" class="btn-primary hidden" onclick="nextQuestion()">Next Question →</button>
                 </div>
@@ -389,7 +425,8 @@
             <div class="results-card">
                 <div style="font-size: 3.5rem; margin-bottom: 10px;" id="resultsIcon">🏆</div>
                 <h1 id="resultsTitle" style="font-size: 2.2rem; color: var(--text-primary);">Quiz Complete!</h1>
-                <p id="resultsMessage" style="color: var(--text-secondary); margin-top: 8px;">Great effort on testing your Full Stack skills!</p>
+                <p id="resultsMessage" style="color: var(--text-secondary); margin-top: 8px;">Great effort on testing
+                    your Full Stack skills!</p>
 
                 <div class="score-circle-container">
                     <svg class="score-circle-svg" viewBox="0 0 160 160">
@@ -410,7 +447,9 @@
 
                 <div style="display: flex; gap: 14px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
                     <button class="btn-primary" onclick="goToUserDashboard()">Take Another Quiz</button>
-                    <button class="btn-primary" onclick="downloadPdfReport()" style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">📄 Download PDF Report</button>
+                    <button class="btn-primary" onclick="downloadPdfReport()"
+                        style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">📄 Download PDF
+                        Report</button>
                     <button class="btn-secondary" onclick="toggleAnswerReview()">Review Answers 📖</button>
                     <button class="btn-secondary" onclick="goBack()">Role Selection</button>
                 </div>
@@ -426,4 +465,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

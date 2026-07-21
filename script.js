@@ -508,17 +508,10 @@ function hideAllScreens() {
     screens.forEach(screen => screen.classList.remove('active'));
 }
 
-// Developer Registration & Onboarding Handlers
+// Developer Registration & Onboarding Handlers (Temporary Session Storage)
 function loadDeveloperProfile() {
-    try {
-        const savedProfile = localStorage.getItem('dev_arena_profile');
-        if (savedProfile) {
-            developerProfile = JSON.parse(savedProfile);
-            updateWelcomeCard();
-        }
-    } catch (e) {
-        console.log('Error loading developer profile:', e);
-    }
+    // Keep developer profile strictly temporary in session memory (cleared on refresh)
+    developerProfile = null;
 }
 
 function openRegistrationModal() {
@@ -553,12 +546,8 @@ function submitRegistration(event) {
         return;
     }
 
+    // Save strictly in memory for current quiz session
     developerProfile = { name, email, experience, stack };
-    try {
-        localStorage.setItem('dev_arena_profile', JSON.stringify(developerProfile));
-    } catch (e) {
-        console.log('LocalStorage not available');
-    }
 
     updateWelcomeCard();
     closeRegistrationModal();
@@ -1030,6 +1019,14 @@ function showResults() {
     document.getElementById('resultsIcon').textContent = icon;
     document.getElementById('resultsTitle').textContent = title;
     document.getElementById('resultsMessage').textContent = msg;
+
+    if (developerProfile) {
+        document.getElementById('resCandidateName').textContent = `Candidate: ${developerProfile.name}`;
+        document.getElementById('resCandidateMeta').textContent = `${developerProfile.email} | ${developerProfile.experience} ${developerProfile.stack} Developer`;
+        document.getElementById('resultsCandidateBanner').style.display = 'block';
+    } else {
+        document.getElementById('resultsCandidateBanner').style.display = 'none';
+    }
 
     renderAnswerReview();
 }
