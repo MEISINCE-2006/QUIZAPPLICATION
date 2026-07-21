@@ -802,6 +802,9 @@ function selectQuizCategory(category, element) {
 // User Quiz Arena Engine
 function startQuiz(difficulty) {
     loadQuestionsFromStorage();
+    // Hide exit dropdown if open
+    const exitMenu = document.getElementById('exitDropdownMenu');
+    if (exitMenu) exitMenu.classList.add('hidden');
     playSound('click');
 
     let filtered = questions.filter(q => q.difficulty === difficulty);
@@ -969,11 +972,22 @@ function nextQuestion() {
     displayQuestion();
 }
 
+function toggleExitDropdown() {
+    playSound('click');
+    const menu = document.getElementById('exitDropdownMenu');
+    if (menu) menu.classList.toggle('hidden');
+}
+
+function confirmExitQuiz() {
+    playSound('click');
+    const menu = document.getElementById('exitDropdownMenu');
+    if (menu) menu.classList.add('hidden');
+    clearInterval(questionTimer);
+    goToUserDashboard();
+}
+
 function endQuiz() {
-    if (confirm('Are you sure you want to exit the current quiz? Progress will be lost.')) {
-        clearInterval(questionTimer);
-        goToUserDashboard();
-    }
+    confirmExitQuiz();
 }
 
 function showResults() {

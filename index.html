@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Stack Developer Quiz Platform</title>
+    <title>quizzapply</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -320,9 +320,7 @@
         </div>
     </div>
 
-    <!-- Active Quiz Screen -->
-    <div id="quizScreen" class="screen">
-        <div class="container">
+
             <div class="quiz-header">
                 <div class="progress-container">
                     <div class="quiz-meta-info">
@@ -333,11 +331,18 @@
                         <div class="progress-bar-fill" id="progressFill"></div>
                     </div>
                 </div>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <div class="timer-box" id="timerBox">
-                        ⏱️ <span id="timerCount">30</span>s
+
+                        <button class="btn-secondary" id="exitQuizBtn" onclick="toggleExitDropdown()" style="display: flex; align-items: center; gap: 6px;">
+                            🚪 Exit Quiz ▾
+                        </button>
+                        <div id="exitDropdownMenu" class="form-card hidden" style="position: absolute; right: 0; top: 50px; width: 220px; padding: 15px; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: var(--card-border); margin: 0; text-align: left; background: var(--card-bg); backdrop-filter: var(--glass-backdrop);">
+                            <p style="font-size: 0.85rem; color: var(--text-primary); margin-bottom: 12px; font-weight: 600; text-align: center;">Abandon current quiz?</p>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <button class="btn-primary" onclick="confirmExitQuiz()" style="padding: 6px 12px; font-size: 0.8rem; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none; color: white; width: 100%;">Yes, Exit Quiz</button>
+                                <button class="btn-secondary" onclick="toggleExitDropdown()" style="padding: 6px 12px; font-size: 0.8rem; width: 100%; text-align: center; justify-content: center;">No, Keep Playing</button>
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn-secondary" onclick="endQuiz()">Exit Quiz</button>
                 </div>
             </div>
             
