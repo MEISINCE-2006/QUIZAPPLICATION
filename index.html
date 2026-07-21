@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>quizzapply</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <!-- Canvas for Victory Confetti -->
@@ -409,6 +410,7 @@
 
                 <div style="display: flex; gap: 14px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
                     <button class="btn-primary" onclick="goToUserDashboard()">Take Another Quiz</button>
+                    <button class="btn-primary" onclick="downloadPdfReport()" style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">📄 Download PDF Report</button>
                     <button class="btn-secondary" onclick="toggleAnswerReview()">Review Answers 📖</button>
                     <button class="btn-secondary" onclick="goBack()">Role Selection</button>
                 </div>

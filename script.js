@@ -463,7 +463,6 @@ function submitAdminPin() {
         selectRole('admin');
     } else {
         playSound('incorrect');
-        errorMsg.textContent = 'Incorrect PIN! Hint: 2006';
         modalCard.classList.add('shake');
         setTimeout(() => modalCard.classList.remove('shake'), 500);
         const pinInputs = document.querySelectorAll('.pin-digit');
@@ -471,17 +470,14 @@ function submitAdminPin() {
         pinInputs[0].focus();
     }
 }
-
-// Navigation & Screen Control
 function selectRole(role) {
     currentRole = role;
-    
+
     if (role === 'admin') {
         hideAllScreens();
         document.getElementById('adminDashboard').classList.add('active');
         showQuestions();
     } else {
-        // Developer Arena Onboarding Check
         if (developerProfile) {
             updateWelcomeCard();
             hideAllScreens();
@@ -546,28 +542,28 @@ function closeRegistrationModal() {
 
 function submitRegistration(event) {
     event.preventDefault();
-    
+
     const name = document.getElementById('regName').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     const experience = document.getElementById('regExp').value;
     const stack = document.getElementById('regStack').value;
-    
+
     if (!name || !email || !experience || !stack) {
         alert('Please fill out all required fields.');
         return;
     }
-    
+
     developerProfile = { name, email, experience, stack };
     try {
         localStorage.setItem('dev_arena_profile', JSON.stringify(developerProfile));
     } catch (e) {
         console.log('LocalStorage not available');
     }
-    
+
     updateWelcomeCard();
     closeRegistrationModal();
     playSound('correct');
-    
+
     // Proceed to Developer Arena
     hideAllScreens();
     document.getElementById('userDashboard').classList.add('active');
@@ -576,7 +572,7 @@ function submitRegistration(event) {
 function updateWelcomeCard() {
     if (developerProfile) {
         document.getElementById('welcomeDevName').textContent = developerProfile.name;
-        document.getElementById('welcomeDevDetails').textContent = 
+        document.getElementById('welcomeDevDetails').textContent =
             `${developerProfile.experience} ${developerProfile.stack} Developer | ${developerProfile.email}`;
     }
 }
@@ -623,7 +619,7 @@ function showCreateQuestion(editIndex = -1) {
         saveBtn.textContent = 'Save Question';
         document.getElementById('questionForm').reset();
     }
-    
+
     formCard.scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -642,7 +638,7 @@ function showQuestions() {
 
 function handleQuestionSubmit(e) {
     e.preventDefault();
-    
+
     const editIndex = parseInt(document.getElementById('editQuestionIndex').value);
     const difficulty = document.getElementById('difficulty').value;
     const category = document.getElementById('category').value;
@@ -654,7 +650,7 @@ function handleQuestionSubmit(e) {
     const option4 = document.getElementById('option4').value.trim();
     const correctAnswer = document.getElementById('correctAnswer').value;
     const explanation = document.getElementById('explanation').value.trim();
-    
+
     const questionObj = {
         difficulty,
         category,
@@ -664,7 +660,7 @@ function handleQuestionSubmit(e) {
         correct: correctAnswer,
         explanation
     };
-    
+
     if (editIndex >= 0) {
         questions[editIndex] = questionObj;
         alert('Question updated successfully!');
@@ -672,7 +668,7 @@ function handleQuestionSubmit(e) {
         questions.push(questionObj);
         alert('Question added successfully!');
     }
-    
+
     saveQuestionsToStorage();
     playSound('correct');
     hideCreateQuestion();
@@ -698,7 +694,7 @@ function displayQuestions() {
     }
 
     let filtered = filterQuestionsList();
-    
+
     if (filtered.length === 0) {
         container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 30px;">No questions match your current search/filter criteria.</p>';
         return;
@@ -1149,5 +1145,124 @@ function loadQuestionsFromStorage() {
         }
     } catch (e) {
         questions = defaultQuestions;
+    }
+}
+
+// PDF Assessment Report Generator
+function downloadPdfReport() {
+    playSound('click');
+
+    const dateStr = new Date().toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+
+    const total = currentQuiz.length;
+    const percentage = Math.round((score / total) * 100);
+    const devName = (typeof developerProfile !== 'undefined' && developerProfile?.name) ? developerProfile.name : 'Developer Candidate';
+    const devDetails = (typeof developerProfile !== 'undefined' && developerProfile?.email) ? `${developerProfile.email} | ${developerProfile.experience || ''} ${developerProfile.stack || ''}` : 'Full Stack Engineering Assessment';
+
+    let grade = 'Junior Developer';
+    if (percentage >= 80) grade = 'Senior Full Stack Specialist';
+    else if (percentage >= 60) grade = 'Mid-Level Full Stack Developer';
+
+    const reportElement = document.createElement('div');
+    reportElement.style.padding = '30px';
+    reportElement.style.fontFamily = "'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+    reportElement.style.color = '#0f172a';
+    reportElement.style.backgroundColor = '#ffffff';
+
+    let questionsHtml = '';
+    userAnswers.forEach((ans, idx) => {
+        const isPass = ans.isCorrect;
+        const statusBadge = isPass 
+            ? `<span style="background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px;">CORRECT ✅</span>`
+            : `<span style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px;">INCORRECT ❌</span>`;
+
+        const codeSnippet = ans.codeSnippet ? `
+            <pre style="background: #0f172a; color: #38bdf8; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-family: monospace; white-space: pre-wrap; margin: 8px 0;">${escapeHtml(ans.codeSnippet)}</pre>
+        ` : '';
+
+        questionsHtml += `
+            <div style="border: 1px solid #e2e8f0; border-left: 4px solid ${isPass ? '#10b981' : '#ef4444'}; border-radius: 10px; padding: 16px; margin-bottom: 14px; page-break-inside: avoid;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="font-size: 14px; color: #1e293b;">Q${idx + 1}: ${escapeHtml(ans.question)}</strong>
+                    ${statusBadge}
+                </div>
+                ${codeSnippet}
+                <div style="font-size: 13px; color: #475569; margin-top: 6px;">
+                    <span>User Choice: <strong>Option ${ans.selected}</strong></span> | 
+                    <span style="color: #059669;">Correct Answer: <strong>Option ${ans.correct}</strong></span>
+                </div>
+                ${ans.explanation ? `<p style="font-size: 12px; color: #64748b; margin-top: 6px; font-style: italic;">💡 ${escapeHtml(ans.explanation)}</p>` : ''}
+            </div>
+        `;
+    });
+
+    reportElement.innerHTML = `
+        <div style="border-bottom: 2px solid #6366f1; padding-bottom: 20px; margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 style="margin: 0; font-size: 24px; color: #1e1b4b;">⚡ Full Stack Developer Assessment</h1>
+                    <p style="margin: 4px 0 0 0; color: #64748b; font-size: 13px;">Official Evaluation Report & Performance Summary</p>
+                </div>
+                <div style="text-align: right; font-size: 12px; color: #64748b;">
+                    <div>Date: <strong>${dateStr}</strong></div>
+                    <div>Candidate: <strong>${escapeHtml(devName)}</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <div style="text-align: center;">
+                <span style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700;">Score</span>
+                <div style="font-size: 22px; font-weight: 800; color: #4f46e5; margin-top: 4px;">${score} / ${total}</div>
+            </div>
+            <div style="text-align: center; border-left: 1px solid #cbd5e1; border-right: 1px solid #cbd5e1;">
+                <span style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700;">Percentage</span>
+                <div style="font-size: 22px; font-weight: 800; color: #0891b2; margin-top: 4px;">${percentage}%</div>
+            </div>
+            <div style="text-align: center;">
+                <span style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700;">Rating</span>
+                <div style="font-size: 16px; font-weight: 700; color: #059669; margin-top: 6px;">${grade}</div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 16px; color: #0f172a; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Detailed Question Evaluation</h3>
+        ${questionsHtml}
+
+        <div style="margin-top: 30px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 12px;">
+            Generated by Full Stack Developer Quiz Studio • ${dateStr}
+        </div>
+    `;
+
+    if (typeof html2pdf !== 'undefined') {
+        const opt = {
+            margin:       10,
+            filename:     `FullStack_Quiz_Report_${Date.now()}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(reportElement).save();
+    } else {
+        const printWin = window.open('', '_blank');
+        printWin.document.write(`
+            <html>
+                <head>
+                    <title>Full Stack Quiz Report</title>
+                    <style>
+                        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+                        @media print { body { padding: 0; } }
+                    </style>
+                </head>
+                <body>
+                    ${reportElement.innerHTML}
+                    <script>
+                        window.onload = function() { window.print(); window.close(); }
+                    </script>
+                </body>
+            </html>
+        `);
+        printWin.document.close();
     }
 }
