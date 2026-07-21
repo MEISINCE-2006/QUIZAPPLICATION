@@ -123,28 +123,234 @@
         </div>
     </div>
 
-    <!-- Role Selection Screen -->
+    <!-- Role Selection Screen / Website Front Page -->
     <div id="roleSelection" class="screen active">
         <div class="container">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <span class="badge-pill tech">⚡ Full Stack Engineering</span>
-            </div>
-            <h1 class="title">Developer Quiz Studio</h1>
-            <p class="subtitle">Master Frontend, Backend, Databases & Cloud Architecture</p>
+            <!-- Website Navbar -->
+            <nav class="site-nav">
+                <a href="#home" class="nav-brand">
+                    <div class="brand-icon">⚡</div>
+                    <span>DevStudio</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#tracks">Tracks</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#portals">Portals</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="btn-secondary" onclick="openAdminAccess()"
+                        style="padding: 8px 16px; font-size: 0.88rem;">👨‍💻 Admin </button>
+                    <button class="btn-primary" onclick="selectRole('user')"
+                        style="padding: 8px 18px; font-size: 0.88rem;">🚀 Enter Arena</button>
+                </div>
+            </nav>
 
-            <div class="role-buttons">
-                <div class="role-card" onclick="openAdminAccess()">
-                    <div class="role-icon-container">👨‍💻</div>
-                    <h3>Admin Portal</h3>
-                    <p>Create questions, attach code snippets, manage question bank & export datasets.</p>
+            <!-- Hero Section -->
+            <header class="hero-banner" id="home">
+                <div class="hero-pill">
+                    <span>⚡ 2026 FULL STACK ENGINEERING BENCHMARK</span>
+                </div>
+                <h1 class="hero-title">Benchmark & Elevate Your Full Stack Expertise</h1>
+                <p class="hero-desc">
+                    An interactive engineering evaluation studio. Test your knowledge across Frontend, Node.js Async
+                    Systems, SQL/NoSQL Databases, Docker & Web Security with syntax-highlighted code problems and
+                    instant PDF certification.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="selectRole('user')"
+                        style="padding: 14px 32px; font-size: 1.05rem;">
+                        🚀 Start Developer Challenge
+                    </button>
+                    <button class="btn-secondary" onclick="openAdminAccess()"
+                        style="padding: 14px 28px; font-size: 1.05rem;">
+                        👨‍💻 Admin Management Portal
+                    </button>
+                </div>
+            </header>
+
+            <!-- Platform Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Developer Questions</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Engineering Tracks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">30s</div>
+                    <div class="stat-label">Challenge Timer</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">PDF Evaluation Reports</div>
+                </div>
+            </div>
+
+            <!-- Engineering Tracks Section -->
+            <section class="tracks-section" id="tracks" style="scroll-margin-top: 100px;">
+                <div class="section-header">
+                    <h2>Master 5 Core Engineering Tracks</h2>
+                    <p>Comprehensive assessment domains covering the modern full stack developer ecosystem</p>
                 </div>
 
-                <div class="role-card" onclick="selectRole('user')">
-                    <div class="role-icon-container">🚀</div>
-                    <h3>Developer Arena</h3>
-                    <p>Test your Full Stack skills across Frontend, Node.js, SQL/NoSQL & System Design.</p>
+                <div class="tracks-grid">
+                    <div class="track-card">
+                        <div class="track-icon">🎨</div>
+                        <h3>Frontend Architecture</h3>
+                        <p>Evaluate HTML5 semantics, CSS Grid/Flexbox, ES6+ closures, Promises, Async/Await & React DOM
+                            Reconciliation.</p>
+                        <div class="track-tags">
+                            <span class="track-tag">HTML5</span>
+                            <span class="track-tag">CSS3</span>
+                            <span class="track-tag">ES6+</span>
+                            <span class="track-tag">React</span>
+                        </div>
+                    </div>
+
+                    <div class="track-card">
+                        <div class="track-icon">⚙️</div>
+                        <h3>Backend & Node.js</h3>
+                        <p>Assess Node.js Event Loop execution order, Express middleware stacks, async streams &
+                            REST/GraphQL API design.</p>
+                        <div class="track-tags">
+                            <span class="track-tag">Node.js</span>
+                            <span class="track-tag">Express</span>
+                            <span class="track-tag">Async I/O</span>
+                            <span class="track-tag">APIs</span>
+                        </div>
+                    </div>
+
+                    <div class="track-card">
+                        <div class="track-icon">🗄️</div>
+                        <h3>Database Engineering</h3>
+                        <p>Master SQL query optimization, ACID transactions, MongoDB indexing, aggregation pipelines &
+                            Redis caching.</p>
+                        <div class="track-tags">
+                            <span class="track-tag">SQL</span>
+                            <span class="track-tag">MongoDB</span>
+                            <span class="track-tag">Indexing</span>
+                            <span class="track-tag">Redis</span>
+                        </div>
+                    </div>
+
+                    <div class="track-card">
+                        <div class="track-icon">🐳</div>
+                        <h3>DevOps & Infrastructure</h3>
+                        <p>Test Docker multi-stage container builds, Git hard resets, CI/CD automation pipelines & Linux
+                            administration.</p>
+                        <div class="track-tags">
+                            <span class="track-tag">Docker</span>
+                            <span class="track-tag">Git</span>
+                            <span class="track-tag">CI/CD</span>
+                            <span class="track-tag">Linux</span>
+                        </div>
+                    </div>
+
+                    <div class="track-card">
+                        <div class="track-icon">🛡️</div>
+                        <h3>Web Security Standards</h3>
+                        <p>Identify OWASP Top 10 vulnerabilities, JWT signature mechanics, CORS headers & XSS/CSRF
+                            mitigation strategies.</p>
+                        <div class="track-tags">
+                            <span class="track-tag">OWASP</span>
+                            <span class="track-tag">JWT</span>
+                            <span class="track-tag">CORS</span>
+                            <span class="track-tag">XSS</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Features Highlights Section -->
+            <section class="features-section" id="features" style="scroll-margin-top: 100px;">
+                <div class="section-header">
+                    <h2>Built for Modern Technical Evaluation</h2>
+                    <p>Designed with developer experience, rich code rendering, and instant reporting in mind</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div style="font-size: 2rem;">⚡</div>
+                        <h4>Live Code Snippets</h4>
+                        <p>Assess real-world code snippets rendered with syntax highlighting in Fira Code font.</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <div style="font-size: 2rem;">📄</div>
+                        <h4>Instant PDF Reports</h4>
+                        <p>Export official PDF evaluation certificates with itemized question analysis.</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <div style="font-size: 2rem;">🔒</div>
+                        <h4>PIN-Guarded Admin Studio</h4>
+                        <p>Full question bank CRUD management protected by secure PIN 2006 authentication.</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <div style="font-size: 2rem;">🌙</div>
+                        <h4>Cyber Dark & Glass Light</h4>
+                        <p>Dynamic dual-theme engine with Web Audio sound effects & celebration confetti.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portals Section -->
+            <section class="portals-section" id="portals" style="scroll-margin-top: 100px;">
+                <div class="section-header">
+                    <h2>Select Your Assessment Portal</h2>
+                    <p>Choose your entry path to start taking tests or managing question inventory</p>
+                </div>
+
+                <div class="role-buttons">
+                    <div class="role-card" onclick="selectRole('user')">
+                        <div class="role-icon-container">🚀</div>
+                        <h3>Developer Arena</h3>
+                        <p>Take full stack developer quizzes across Junior, Mid, and Senior difficulty levels.</p>
+                        <button class="btn-primary" style="margin-top: 20px; width: 100%;">Enter Arena →</button>
+                    </div>
+
+                    <div class="role-card" onclick="openAdminAccess()">
+                        <div class="role-icon-container">👨‍💻</div>
+                        <h3>Admin Command Center</h3>
+                        <p>Add new tech problems with code snippets, edit inventory & export JSON datasets (PIN: 2006).
+                        </p>
+                        <button class="btn-secondary" style="margin-top: 20px; width: 100%;">Unlock Portal 🔒</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Site Footer -->
+            <footer class="site-footer">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <h4>⚡ Full Stack Developer Quiz Studio</h4>
+                        <p>The premier interactive evaluation platform for benchmarking modern web development skills.
+                        </p>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Platform</h5>
+                        <ul>
+                            <li><a href="#tracks">Engineering Tracks</a></li>
+                            <li><a href="#features">Platform Features</a></li>
+                            <li><a href="#portals">Assessment Portals</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Security & Admin</h5>
+                        <ul>
+                            <li><a href="javascript:void(0)" onclick="openAdminAccess()">Admin Portal </a>
+                            </li>
+                            <li><a href="javascript:void(0)" onclick="selectRole('user')">Developer Arena</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    © 2026 Developer Quiz Studio • Built for Full Stack Engineers
+                </div>
+            </footer>
         </div>
     </div>
 
