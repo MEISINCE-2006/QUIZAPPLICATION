@@ -41,6 +41,56 @@
         </div>
     </div>
 
+    <!-- Developer Arena Registration Modal -->
+    <div id="registrationModal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 480px; text-align: left;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div class="lock-icon" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(99, 102, 241, 0.2)); border-color: rgba(6, 182, 212, 0.4); margin: 0 auto 15px auto;">🚀</div>
+                <h2>Developer Arena Entry</h2>
+                <p style="color: var(--text-secondary); margin-top: 6px; font-size: 0.9rem;">
+                    Please provide your basic details to access the challenge arena.
+                </p>
+            </div>
+            
+            <form id="registrationForm" onsubmit="submitRegistration(event)">
+                <div class="form-group">
+                    <label for="regName">Name *</label>
+                    <input type="text" id="regName" placeholder="e.g. Jane Doe" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email *</label>
+                    <input type="email" id="regEmail" placeholder="e.g. jane.doe@example.com" required autocomplete="email">
+                </div>
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="regExp">Experience Level *</label>
+                        <select id="regExp" required>
+                            <option value="" disabled selected>Select Level</option>
+                            <option value="Junior">Junior / Student</option>
+                            <option value="Mid-Level">Mid-Level</option>
+                            <option value="Senior">Senior / Lead</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="regStack">Primary Stack *</label>
+                        <select id="regStack" required>
+                            <option value="" disabled selected>Select Stack</option>
+                            <option value="Frontend">Frontend</option>
+                            <option value="Backend">Backend</option>
+                            <option value="Fullstack">Full Stack</option>
+                            <option value="DevOps">DevOps</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 25px;">
+                    <button type="button" class="btn-secondary" onclick="closeRegistrationModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Enter Arena ⚡</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Role Selection Screen -->
     <div id="roleSelection" class="screen active">
         <div class="container">
@@ -223,6 +273,18 @@
             <div class="header-bar">
                 <h1>🎯 Select Quiz Challenge</h1>
                 <button class="btn-secondary" onclick="goBack()">← Back to Roles</button>
+            </div>
+            
+            <!-- Developer Welcome Card -->
+            <div id="developerWelcomeCard" class="form-card" style="margin-bottom: 25px; padding: 20px; display: flex; align-items: center; gap: 15px; justify-content: space-between; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="role-icon-container" style="width: 50px; height: 50px; border-radius: 12px; margin: 0; font-size: 1.6rem; background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.3);">💻</div>
+                    <div>
+                        <h3 id="welcomeDevName" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Developer</h3>
+                        <p id="welcomeDevDetails" style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Experience Level | Email Address</p>
+                    </div>
+                </div>
+                <button class="btn-secondary" onclick="editDeveloperDetails()" style="padding: 8px 14px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">✏️ Edit Details</button>
             </div>
             
             <div style="margin-bottom: 25px;">
